@@ -1,0 +1,8 @@
+<RCC>
+    <qresource prefix="/">
+        <file>fonts/icomoon.eot</file>
+        <file>fonts/icomoon.svg</file>
+        <file>fonts/icomoon.ttf</file>
+        <file>fonts/icomoon.woff</file>
+    </qresource>
+</RCC>
