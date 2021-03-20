@@ -3,6 +3,8 @@
 #include <QtQml/QQmlEngine>
 #include <QQmlContext>
 #include <QFontDatabase>
+#include <QDebug>
+#include "gestiondyna.h"
 
 int main(int argc, char *argv[])
 {
@@ -10,15 +12,18 @@ int main(int argc, char *argv[])
     app.setOrganizationName("Titi");
     app.setOrganizationDomain("Titi");
 
+    GestionDyna gestDyna;
+
     QQuickView viewer;
     QString extraImportPath(QStringLiteral("%1/../../../%2"));
     //QFontDatabase::addApplicationFont(QUrl("qrc:/fonts/icomoon.ttf").toString());
     QFontDatabase::addApplicationFont(":/fonts/icomoon.ttf");
 
-
     viewer.engine()->addImportPath(extraImportPath.arg(QGuiApplication::applicationDirPath(),
                                                        QString::fromLatin1("qml")));
     viewer.setTitle(QStringLiteral("Project Spider"));
+    viewer.engine()->rootContext()->setContextProperty("gestDyna", &gestDyna);
+
 
 #ifdef Q_OS_LINUX
     viewer.engine()->rootContext()->setContextProperty("fileRoot", "file://");

@@ -1,5 +1,7 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
+        <file>Composants/SelecteurOnglets.qml</file>
+        <file>GestionDyna/SettingsDyna.qml</file>
     </qresource>
 </RCC>
