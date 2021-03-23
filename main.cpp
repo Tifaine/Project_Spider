@@ -5,6 +5,7 @@
 #include <QFontDatabase>
 #include <QDebug>
 #include "gestiondyna.h"
+#include "GestionSequence/gestionactions.h"
 
 int main(int argc, char *argv[])
 {
@@ -13,6 +14,7 @@ int main(int argc, char *argv[])
     app.setOrganizationDomain("Titi");
 
     GestionDyna gestDyna;
+    GestionActions gestActions;
 
     QQuickView viewer;
     QString extraImportPath(QStringLiteral("%1/../../../%2"));
@@ -23,6 +25,7 @@ int main(int argc, char *argv[])
                                                        QString::fromLatin1("qml")));
     viewer.setTitle(QStringLiteral("Project Spider"));
     viewer.engine()->rootContext()->setContextProperty("gestDyna", &gestDyna);
+    viewer.engine()->rootContext()->setContextProperty("gestActions", &gestActions);
 
 
 #ifdef Q_OS_LINUX
@@ -37,5 +40,6 @@ int main(int argc, char *argv[])
     viewer.setResizeMode(QQuickView::SizeRootObjectToView);
     viewer.show();
 
+    gestActions.init(&gestDyna);
     return app.exec();
 }

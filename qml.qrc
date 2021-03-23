@@ -3,5 +3,8 @@
         <file>main.qml</file>
         <file>Composants/SelecteurOnglets.qml</file>
         <file>GestionDyna/SettingsDyna.qml</file>
+        <file>Composants/CustomComboBox.qml</file>
+        <file>Composants/FlickableList.qml</file>
+        <file>GestionSequence/MainPageSequence.qml</file>
     </qresource>
 </RCC>

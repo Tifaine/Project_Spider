@@ -5,11 +5,10 @@
 #include <QDebug>
 #include <QList>
 #include "dynamixel_sdk.h"
+#include <QtSerialPort/QSerialPortInfo>
 
 #define PROTOCOL_VERSION                1.0
-#define DXL_ID                          2                   // Dynamixel ID: 1
 #define BAUDRATE                        1000000
-#define DEVICENAME                      "COM3"
 #define ADDR_MX_TORQUE_ENABLE           24                  // Control table address is different in Dynamixel model
 #define ADDR_MX_GOAL_POSITION           30
 #define ADDR_MX_GOAL_SPEED              32
@@ -34,6 +33,7 @@ public:
 
 public slots:
     void updateListDyna(int from, int to);
+    bool init(QString portCom);
 
     //Test if ID is contained in listIdDyna, return index in the list, -1 if not there.
     int containsID(int idToTest);
@@ -41,10 +41,16 @@ public slots:
     Dyna* getDynaAtIndex(int index);
     int getNbDyna();
 
+    int getNbPortCOMAvailable();
+    QString getPortComName(int indice);
+
+    void setValueDyna(int idDyna, int value);
+    void setSpeedDyna(int idDyna, int value);
+
 private:
-    void init();
 
 signals:
+    void newDyna(QString id, QString pos);
 
 private:
     QList<Dyna*> listIdDyna;

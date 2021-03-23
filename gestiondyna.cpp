@@ -2,7 +2,7 @@
 #include <QThread>
 GestionDyna::GestionDyna(QObject *parent) : QObject(parent)
 {
-    init();
+    /*init();
     updateListDyna(1, 43);
     updateListDyna(1, 43);
 
@@ -10,7 +10,6 @@ GestionDyna::GestionDyna(QObject *parent) : QObject(parent)
     {
         qDebug()<< listIdDyna.at(i)->id<<" "<<listIdDyna.at(i)->position<<" "<<listIdDyna.at(i)->vitesse;
     }
-
 
     uint8_t dxl_error = 0;
     packetHandler->write2ByteTxRx(portHandler, 10, ADDR_MX_GOAL_POSITION, 500, &dxl_error);
@@ -37,7 +36,7 @@ GestionDyna::GestionDyna(QObject *parent) : QObject(parent)
     QThread::msleep(50);
     packetHandler->write2ByteTxRx(portHandler, 32, ADDR_MX_GOAL_POSITION, 500, &dxl_error);
     QThread::msleep(50);
-    packetHandler->write2ByteTxRx(portHandler, 42, ADDR_MX_GOAL_POSITION, 500, &dxl_error);
+    packetHandler->write2ByteTxRx(portHandler, 42, ADDR_MX_GOAL_POSITION, 500, &dxl_error);*/
 }
 
 GestionDyna::~GestionDyna()
@@ -83,9 +82,41 @@ void GestionDyna::updateListDyna(int from, int to)
                 listIdDyna.last()->id = i;
                 listIdDyna.last()->position = dxl_present_position;
                 listIdDyna.last()->vitesse = dxl_present_speed;
+                emit newDyna(QString::number(i), QString::number(dxl_present_position));
             }
         }
     }
+}
+
+bool GestionDyna::init(QString portCom)
+{
+    portHandler = dynamixel::PortHandler::getPortHandler(portCom.toStdString().c_str());
+
+    packetHandler = dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
+                       // Dynamixel model number
+
+    // Open port
+    if (portHandler->openPort())
+    {
+        qDebug()<<("Succeeded to open the port!\n");
+    }
+    else
+    {
+        qDebug()<<("Failed to open the port!\n");
+        return false;
+    }
+
+    // Set port baudrate
+    if (portHandler->setBaudRate(BAUDRATE))
+    {
+        qDebug()<<("Succeeded to change the baudrate!\n");
+    }
+    else
+    {
+        qDebug()<<("Failed to change the baudrate!\n");
+        return false;
+    }
+    return true;
 }
 
 int GestionDyna::containsID(int idToTest)
@@ -112,33 +143,30 @@ int GestionDyna::getNbDyna()
     return listIdDyna.size();
 }
 
-void GestionDyna::init()
+int GestionDyna::getNbPortCOMAvailable()
 {
-    portHandler = dynamixel::PortHandler::getPortHandler(DEVICENAME);
-
-    packetHandler = dynamixel::PacketHandler::getPacketHandler(PROTOCOL_VERSION);
-                       // Dynamixel model number
-
-    // Open port
-    if (portHandler->openPort())
-    {
-        qDebug()<<("Succeeded to open the port!\n");
-    }
-    else
-    {
-        qDebug()<<("Failed to open the port!\n");
-    }
-
-    // Set port baudrate
-    if (portHandler->setBaudRate(BAUDRATE))
-    {
-        qDebug()<<("Succeeded to change the baudrate!\n");
-    }
-    else
-    {
-        qDebug()<<("Failed to change the baudrate!\n");
-    }
-
+    return QSerialPortInfo::availablePorts().size();
 }
 
+QString GestionDyna::getPortComName(int indice)
+{
+    if(indice >= 0 && indice < QSerialPortInfo::availablePorts().size())
+    {
+        return QSerialPortInfo::availablePorts().at(indice).portName();
+    }
+    return "";
+}
+
+void GestionDyna::setValueDyna(int idDyna, int value)
+{
+    uint8_t dxl_error = 0;
+    packetHandler->write2ByteTxRx(portHandler, idDyna, ADDR_MX_GOAL_POSITION, value, &dxl_error);
+}
+
+
+void GestionDyna::setSpeedDyna(int idDyna, int value)
+{
+    uint8_t dxl_error = 0;
+    packetHandler->write2ByteTxRx(portHandler, idDyna, ADDR_MX_GOAL_SPEED, value, &dxl_error);
+}
 

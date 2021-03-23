@@ -3,6 +3,7 @@ import QtQuick.Window 2.15
 import QtGraphicalEffects 1.0
 import QtQuick.Controls 2.12
 import "Composants"
+import "GestionDyna"
 
 Item {
     width: 1600
@@ -84,9 +85,9 @@ Item {
             orientation: Qt.Vertical
             clip:true
 
-            Item
+            SettingsDyna
             {
-                id: item1
+                id: settingsDyna
             }
             Item
             {
